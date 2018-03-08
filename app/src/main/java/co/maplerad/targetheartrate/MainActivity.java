@@ -12,50 +12,46 @@ public class MainActivity extends AppCompatActivity {
     final double NUMBER = 220,
             EIGHTY_FIVE = 85,
             FIFTY = 50;
-    EditText eAge;
+
+    EditText userEditText;
     Button calculate;
     TextView maxRate, target;
-    double age, targetResult1, targetResult2, maxResult;
+
+    double enteredAge = 0,
+            targetResult1 = 0,
+            targetResult2 = 0,
+            maxResult = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        eAge = findViewById(R.id.edAge);
+        userEditText = findViewById(R.id.editText);
         calculate = findViewById(R.id.btnCalculate);
         maxRate = findViewById(R.id.txtMaxHeartRate);
         target = findViewById(R.id.txtTarget);
 
-        try {
-            age = Double.parseDouble(eAge.getText().toString());
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-
         calculate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                maxResult = maximum_heart_rate(NUMBER, age);
+                enteredAge = Double.parseDouble(userEditText.getText().toString());
+
+                maxResult = maximum_heart_rate(NUMBER, enteredAge);
                 targetResult1 = target_heart_rate(maxResult, FIFTY);
                 targetResult2 = target_heart_rate(maxResult, EIGHTY_FIVE);
 
                 maxRate.setText(String.valueOf(maxResult) + "b/m");
-                target.setText("The target heart rate is between " + String.valueOf(targetResult1) +
-                                " and " + String.valueOf(targetResult2));
+                target.setText("Between " + String.valueOf(targetResult1) +
+                        " to " + String.valueOf(targetResult2));
 
             }
         });
     }
 
     public double maximum_heart_rate(double heartRate, double age) {
-        double maxHeartRate = heartRate - age;
-
-        return maxHeartRate;
+        return heartRate - age;
     }
 
-    public double target_heart_rate(double max_hr, double percentage) {
-        double result = (percentage / 100) * max_hr;
-        return result;
-    }
+    public double target_heart_rate(double max_hr, double percentage) { return (percentage / 100) * max_hr; }
 }
